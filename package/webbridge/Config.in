@@ -266,6 +266,8 @@ endif
 menuconfig BR2_PACKAGE_WEBBRIDGE_PLUGIN_TVCONTROL
         bool "tvcontrol"
         select BR2_PACKAGE_CPPSDK_PROCESS
+        select BR2_PACKAGE_SQLITE
+        select BR2_PACKAGE_DVB_APPS
         default n
         help
             A Plugin to interact with TV data
