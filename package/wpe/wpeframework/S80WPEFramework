@@ -16,7 +16,12 @@ start() {
     
     # needed for wayland/westeros/weston
     export XDG_RUNTIME_DIR=/tmp
-    
+
+    export TVC_FREQUENCY_LIST=%FREQUENCY_LIST%
+    export TVC_TUNE_PARAM=%TUNE_PARAM%
+    export TVC_COUNTRY_REGION_ID=%COUNTRY_REGION_ID%
+    export TVC_COUNTRY_CODE=%COUNTRY_CODE%
+
 	echo -n "Starting WPEFramework: "
 	start-stop-daemon -S -q -b -m -p /var/run/WPEFramework.pid --exec /usr/bin/WPEFramework -- -b </dev/null >/dev/null 2>&1
 	[ $? == 0 ] && echo "OK" || echo "FAIL"
