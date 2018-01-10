@@ -222,23 +222,17 @@ config BR2_PACKAGE_WPEFRAMEWORK_SNAPSHOT
 	help
 	  Snapshot Plugin
 
-config BR2_PACKAGE_WPEFRAMEWORK_SICONTROL
-	select BR2_PACKAGE_WPEFRAMEWORK_PLUGINS
-	bool "SI control"
-	help
-	  SI Control Plugin
-
 config BR2_PACKAGE_WPEFRAMEWORK_TIMESYNC
 	select BR2_PACKAGE_WPEFRAMEWORK_PLUGINS
 	bool "TimeSync"
 	help
 	  TimeSync Plugin
 
-config BR2_PACKAGE_WPEFRAMEWORK_TUNER
-	select BR2_PACKAGE_WPEFRAMEWORK_PLUGINS
-	bool "Tuner"
-	help
-	  Tuner Plugin
+config BR2_PACKAGE_WPEFRAMEWORK_COBALT
+    select BR2_PACKAGE_WPEFRAMEWORK_PLUGINS
+    bool "Cobalt"
+    help
+      Cobalt Plugin
 
 config BR2_PACKAGE_WPEFRAMEWORK_TRACECONTROL
 	select BR2_PACKAGE_WPEFRAMEWORK_PLUGINS
@@ -339,8 +333,6 @@ config BR2_PACKAGE_WPEFRAMEWORK_WIFICONTROL
 	help
 	  WifiControl Plugin for Wifi access, linked to Network Control
 
-comment "External plugins below"
-     Tuner Plugin
 config BR2_PACKAGE_WPEFRAMEWORK_TVCONTROL
 	select BR2_PACKAGE_WPEFRAMEWORK_PLUGINS
     select BR2_PACKAGE_SQLITE
@@ -412,8 +404,4 @@ if BR2_PACKAGE_WPEFRAMEWORK_TVCONTROL
 
 endif
 
-config BR2_PACKAGE_WPEFRAMEWORK_RPCLINK
-    select BR2_PACKAGE_WPEFRAMEWORK_PLUGINS
-    bool "RPC link server"
-    help
-      Plugin adding an RPC server to act as a server itself
+comment "External plugins below"
