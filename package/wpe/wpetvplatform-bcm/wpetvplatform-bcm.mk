@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-WPETVPLATFORM_BCM_VERSION = 7971af8d4cca58a14090cd45bbccf1e4796743a9
+WPETVPLATFORM_BCM_VERSION = 83cd315a5373730abdeda7e4c06e2bd45ff6390e
 WPETVPLATFORM_BCM_SITE_METHOD = git
 WPETVPLATFORM_BCM_SITE = git@github.com:WebPlatformForEmbedded/WPETVPlatformBCM.git
 WPETVPLATFORM_BCM_INSTALL_STAGING = YES
