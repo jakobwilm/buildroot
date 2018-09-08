@@ -4,7 +4,7 @@
 #
 ################################################################################
 
-NETFLIX5_VERSION = ea2d825345af5477514f63ff2f54be73ab6fc055
+NETFLIX5_VERSION = b24916915a7c9b4a0be7d154a61bc5477e9edbad
 NETFLIX5_SITE = git@github.com:Metrological/netflix.git
 NETFLIX5_SITE_METHOD = git
 NETFLIX5_LICENSE = PROPRIETARY
@@ -40,190 +40,20 @@ NETFLIX5_CONF_OPTS = \
 	-DBUILD_PRODUCTION=OFF -DNRDP_HAS_QA=ON -DBUILD_SMALL=OFF -DBUILD_SYMBOLS=ON -DNRDP_HAS_TRACING=OFF \
 	-DNRDP_CRASH_REPORTING=breakpad \
 	-DNRDP_HAS_AUDIOMIXER=OFF \
-	-DDPI_SINK_INTERFACE_OVERRIDE_APPBOOT=ON
-
-ifeq ($(BR2_PACKAGE_NETFLIX5_LIB), y)
+	-DDPI_SINK_INTERFACE_OVERRIDE_APPBOOT=ON \
+	-DGIBBON_GRAPHICS=rpi \
+	-DGIBBON_GRAPHICS_GL_WSYS=egl
+	
 NETFLIX5_CONF_OPTS += -DGIBBON_MODE=shared
 NETFLIX5_FLAGS = -O3 -fPIC
-else
-NETFLIX5_CONF_OPTS += -DGIBBON_MODE=executable
-endif
-
-ifeq ($(BR2_PACKAGE_WESTEROS)$(BR2_PACKAGE_WPEFRAMEWORK_COMPOSITOR),yy)
-NETFLIX5_CONF_OPTS += -DGIBBON_INPUT=wpeframework
-NETFLIX5_DEPENDENCIES = wpeframework-plugins
-else
-NETFLIX5_CONF_OPTS += -DGIBBON_INPUT=devinput
-endif
-
-ifeq ($(BR2_PACKAGE_WPEFRAMEWORK_VIRTUALINPUT)$(BR2_PACKAGE_WPEFRAMEWORK_COMPOSITOR),yn)
-NETFLIX5_CONF_OPTS += -DUSE_NETFLIX_VIRTUAL_KEYBOARD=1
-NETFLIX5_DEPENDENCIES += WPEFramework
-endif
-
-ifeq ($(BR2_PACKAGE_NETFLIX5_GST_GL),y)
-  NETFLIX5_CONF_OPTS += -DGST_VIDEO_RENDERING=gl
-else ifeq ($(BR2_PACKAGE_NETFLIX5_MARVEL),y)
-  NETFLIX5_CONF_OPTS += -DGST_VIDEO_RENDERING=synaptics
-  NETFLIX5_DEPENDENCIES += westeros westeros-sink
-else ifeq ($(BR2_PACKAGE_NETFLIX5_WESTEROS_SINK),y)
-  NETFLIX5_CONF_OPTS += -DGST_VIDEO_RENDERING=westeros
-  NETFLIX5_DEPENDENCIES += westeros westeros-sink
-endif
-
-ifeq ($(BR2_PACKAGE_RPI_USERLAND),y)
-
-ifeq ($(BR2_PACKAGE_WESTEROS)$(BR2_PACKAGE_WPEFRAMEWORK_COMPOSITOR),yy)
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=wpeframework 
-else ifeq ($(BR2_PACKAGE_WESTEROS)$(BR2_PACKAGE_WPEFRAMEWORK_COMPOSITOR),yn)
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=wayland-egl 
-else
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=rpi-egl
-endif	
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_PLATFORM=rpi
-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_BAD_PLUGIN_GL)$(BR2_PACKAGE_NETFLIX5_WESTEROS_SINK),yn)
-NETFLIX5_CONF_OPTS += \
-	-DGST_VIDEO_RENDERING=gl
-else ifeq ($(BR2_PACKAGE_GST1_PLUGINS_DORNE),y)
-NETFLIX5_CONF_OPTS += \
-	-DGST_VIDEO_RENDERING=horizon-fusion
-endif
-
-NETFLIX5_DEPENDENCIES += libgles libegl
-
-else ifeq ($(BR2_PACKAGE_HAS_NEXUS),y)
-ifeq ($(BR2_PACKAGE_WESTEROS)$(BR2_PACKAGE_WPEFRAMEWORK_COMPOSITOR),yy)
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=wpeframework
-else ifeq ($(BR2_PACKAGE_WESTEROS)$(BR2_PACKAGE_WPEFRAMEWORK_COMPOSITOR),yn)
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=wayland-egl
-else
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=nexus \
-	-DGST_VIDEO_RENDERING=bcm-nexus
-endif	
-
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_PLATFORM=posix 
-NETFLIX5_DEPENDENCIES += libgles libegl
-
-ifeq ($(BR2_PACKAGE_HOMECAST_SDK),y)
-NETFLIX5_CONF_OPTS += -DNO_NXCLIENT=1
-endif
-else ifeq ($(BR2_PACKAGE_INTELCE_SDK),y)
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=intelce \
-	-DGIBBON_PLATFORM=posix
-NETFLIX5_DEPENDENCIES += libgles libegl
-else ifeq ($(BR2_PACKAGE_HORIZON_SDK),y)
-NETFLIX5_CONF_OPTS += \
-	-DNRDP_SCHEDULER_TYPE=rr \
-	-DGIBBON_TCMALLOC=OFF \
-	-DGIBBON_GRAPHICS=intelce \
-	-DGIBBON_PLATFORM=posix \
-	-DDPI_REFERENCE_HAVE_DDPLUS=true
-ifeq ($(BR2_PACKAGE_GST1_PLUGINS_DORNE),y)
-NETFLIX5_CONF_OPTS += \
-	-DGST_VIDEO_RENDERING=horizon-fusion
-endif
-NETFLIX5_DEPENDENCIES += libgles libegl
-else ifeq ($(BR2_PACKAGE_KYLIN_GRAPHICS),y)
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=wayland-egl \
-	-DGIBBON_PLATFORM=posix 
-NETFLIX5_DEPENDENCIES += libgles libegl
-else ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES)$(BR2_PACKAGE_MESA3D),yyn)
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=gles2-egl \
-	-DGIBBON_PLATFORM=posix
-NETFLIX5_DEPENDENCIES += libgles libegl
-else ifeq ($(BR2_PACKAGE_HAS_LIBEGL)$(BR2_PACKAGE_HAS_LIBGLES)$(BR2_PACKAGE_MESA3D),yyy)
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=gles2-mesa \
-	-DGIBBON_PLATFORM=posix
-NETFLIX5_DEPENDENCIES += libgles libegl
-else ifeq ($(BR2_PACKAGE_HAS_LIBGLES),y)
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=gles2 \
-	-DGIBBON_PLATFORM=posix
-NETFLIX5_DEPENDENCIES += libgles
-else
-NETFLIX5_CONF_OPTS += \
-	-DGIBBON_GRAPHICS=null \
-	-DGIBBON_PLATFORM=posix
-endif
-
-#
-# ifeq ($(BR2_PACKAGE_GSTREAMER1),y)
-# NETFLIX5_CONF_OPTS += -DDPI_IMPLEMENTATION=gstreamer
-# NETFLIX5_DEPENDENCIES += gstreamer1 gst1-plugins-base gst1-plugins-bad
-# else ifeq ($(BR2_PACKAGE_HAS_LIBOPENMAX),y)
-# NETFLIX5_CONF_OPTS += \
-# 	-DDPI_IMPLEMENTATION=reference \
-# 	-DDPI_REFERENCE_VIDEO_DECODER=openmax-il \
-# 	-DDPI_REFERENCE_VIDEO_RENDERER=openmax-il \
-# 	-DDPI_REFERENCE_AUDIO_DECODER=ffmpeg \
-# 	-DDPI_REFERENCE_AUDIO_RENDERER=openmax-il \
-# 	-DDPI_REFERENCE_AUDIO_MIXER=none
-# NETFLIX5_DEPENDENCIES += ffmpeg libopenmax
-# else
-# NETFLIX5_CONF_OPTS += -DDPI_IMPLEMENTATION=reference
-# endif
-
-# ifeq ($(BR2_PACKAGE_PLAYREADY),y)
-#     NETFLIX5_CONF_OPTS += -DDPI_REFERENCE_DRM=playready
-#     NETFLIX5_DEPENDENCIES += playready
-# else
-#     NETFLIX5_CONF_OPTS += -DDPI_REFERENCE_DRM=none
-# endif
-
-ifeq ($(BR2_PACKAGE_CPPSDK),y)
-    # This path is deprecated, but for legacy still applicable.
-    ifeq ($(BR2_PACKAGE_LIBPROVISION),y)
-        NETFLIX5_CONF_OPTS += -DNETFLIX_USE_PROVISION=ON
-        NETFLIX5_DEPENDENCIES += libprovision
-    endif
-    ifeq ($(BR2_PACKAGE_GLUELOGIC_VIRTUAL_KEYBOARD),y)
-        NETFLIX5_CONF_OPTS += -DUSE_NETFLIX_VIRTUAL_KEYBOARD=1
-        NETFLIX5_DEPENDENCIES += gluelogic
-    endif
-else
-    ifeq ($(BR2_PACKAGE_WPEFRAMEWORK_PROVISIONPROXY), y)
-        NETFLIX5_CONF_OPTS += -DNETFLIX_USE_PROVISION=ON
-        NETFLIX5_DEPENDENCIES += wpeframework
-    endif
-    ifeq ($(BR2_PACKAGE_WPEFRAMEWORK_VIRTUALINPUT),y)
-        NETFLIX5_CONF_OPTS += -DUSE_NETFLIX_VIRTUAL_KEYBOARD=1
-        NETFLIX5_DEPENDENCIES += wpeframework
-    endif
-endif
-
-ifneq ($(BR2_PACKAGE_NETFLIX5_KEYMAP),"")
-NETFLIX5_CONF_OPTS += -DNETFLIX_USE_KEYMAP=$(call qstrip,$(BR2_PACKAGE_NETFLIX5_KEYMAP))
-endif
 
 NETFLIX5_CONF_OPTS += \
 	-DCMAKE_C_FLAGS="$(TARGET_CFLAGS) $(NETFLIX5_FLAGS)" \
 	-DCMAKE_CXX_FLAGS="$(TARGET_CXXFLAGS) $(NETFLIX5_FLAGS)"
 
-
-
-define NETFLIX5_FIX_CONFIG_XMLS
-	mkdir -p $(@D)/netflix/src/platform/gibbon/data/etc/conf
-	cp -f $(@D)/netflix/resources/configuration/common.xml $(@D)/netflix/src/platform/gibbon/data/etc/conf/common.xml
-	cp -f $(@D)/netflix/resources/configuration/config.xml $(@D)/netflix/src/platform/gibbon/data/etc/conf/config.xml
-endef
-
-NETFLIX5_POST_EXTRACT_HOOKS += NETFLIX5_FIX_CONFIG_XMLS
-
-ifeq ($(BR2_PACKAGE_NETFLIX5_LIB),y)
-
 define NETFLIX5_INSTALL_STAGING_CMDS
+   echo 'About to start install staging commands'
+
 	make -C $(@D)/netflix install
 	$(INSTALL) -m 755 $(@D)/netflix/src/platform/gibbon/libnetflix.so $(STAGING_DIR)/usr/lib
 	$(INSTALL) -D package/netflix/netflix.pc $(STAGING_DIR)/usr/lib/pkgconfig/netflix.pc
@@ -261,21 +91,14 @@ define NETFLIX5_INSTALL_STAGING_CMDS
 	cp $(@D)/netflix/src/platform/gibbon/resources/gibbon/icu/icudt58l/debug/unames.icu $(TARGET_DIR)/root/Netflix/icu/icudt58l
 	cp $(@D)/netflix/src/platform/gibbon/*.js* $(TARGET_DIR)/root/Netflix/resources/js
 	cp $(@D)/netflix/src/platform/gibbon/resources/default/PartnerBridge.js $(TARGET_DIR)/root/Netflix/resources/js
+
+   echo 'Done with install staging commands'
 endef
 
 define NETFLIX5_INSTALL_TARGET_CMDS
 	$(INSTALL) -m 755 $(@D)/netflix/src/platform/gibbon/libnetflix.so $(TARGET_DIR)/usr/lib
 	$(STRIPCMD) $(TARGET_DIR)/usr/lib/libnetflix.so
 endef
-
-else
-
-define NETFLIX5_INSTALL_TARGET_CMDS
-	$(INSTALL) -m 755 $(@D)/netflix/src/platform/gibbon/netflix $(TARGET_DIR)/usr/bin
-	$(INSTALL) -m 755 $(@D)/netflix/src/platform/gibbon/manufss $(TARGET_DIR)/usr/bin
-endef
-
-endif
 
 define NETFLIX5_PREPARE_DPI
 	mkdir -p $(TARGET_DIR)/root/Netflix/dpi
